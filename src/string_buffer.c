@@ -111,7 +111,7 @@ void string_buffer_unlock(string_buffer* sbuf) {
 void string_buffer_call_get(string_buffer* sbuf) {
     if (!sbuf)
         return;
-    pthread_cond_signal(&sbuf->can_get);
+    pthread_cond_signal(&sbuf->can_put);
 }
 
 void string_buffer_wait_get(string_buffer* sbuf) {
@@ -123,7 +123,7 @@ void string_buffer_wait_get(string_buffer* sbuf) {
 void string_buffer_call_put(string_buffer* sbuf) {
     if (!sbuf)
         return;
-    pthread_cond_signal(&sbuf->can_put);
+    pthread_cond_signal(&sbuf->can_get);
 }
 
 void string_buffer_wait_put(string_buffer* sbuf) {
