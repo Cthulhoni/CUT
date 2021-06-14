@@ -25,7 +25,7 @@ CC ?= gcc
 
 H_INC := $(foreach d, $(IDIR), -I$d)
 
-C_FLAGS := -Wall -Wextra
+C_FLAGS := -pthread -Wall -Wextra
 
 DEP_FLAGS := -MMD -MP
 
