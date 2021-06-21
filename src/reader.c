@@ -7,7 +7,7 @@
 
 #include <string_buffer.h>
 
-#define SLEEP_TIME 5U
+#define SLEEP_TIME 1U
 
 static inline bool line_starts_with(const char* line, const char* start) {
     return strncmp(line, start, strlen(start)) == 0;
@@ -15,19 +15,16 @@ static inline bool line_starts_with(const char* line, const char* start) {
 
 
 void* reader_get_cpu_data(void* arg) {
-    FILE* stat_file = fopen("/proc/stat", "r");
-
-    if (!stat_file) {
-        return NULL;
-    }
-
     if (!arg) {
         return NULL;
     }
 
-    string_buffer* sbuf = *(string_buffer**)arg;
+    string_buffer* sbuf = (string_buffer*)arg;
 
     while (true) {
+        FILE* stat_file = fopen("/proc/stat", "r");
+        if (!stat_file)
+            return NULL;
 
         sleep(SLEEP_TIME);
 
@@ -48,7 +45,7 @@ void* reader_get_cpu_data(void* arg) {
         while (fgets(buffer, sizeof(buffer), stat_file) && line_starts_with(buffer, "cpu")) {
             strcat(raw_data, buffer);
         }
-        rewind(stat_file);
+
 
         string_buffer_lock(sbuf);
         if (string_buffer_is_full(sbuf)) {
@@ -60,10 +57,9 @@ void* reader_get_cpu_data(void* arg) {
 
         free(raw_data);
 
+        fclose(stat_file);
+
     }
-
-
-    fclose(stat_file);
 
     return NULL;
 }
