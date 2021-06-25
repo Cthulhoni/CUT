@@ -33,7 +33,7 @@ void* reader_get_cpu_data(void* arg) {
         size_t number_of_characters = 0;
 
         while (fgets(buffer, sizeof(buffer), stat_file) && line_starts_with(buffer, "cpu")) {
-            number_of_characters += sizeof(buffer);
+            number_of_characters += strlen(buffer);
         }
 
         rewind(stat_file);
