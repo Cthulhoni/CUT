@@ -60,6 +60,8 @@ void* reader_get_cpu_data(void* arg) {
     string_buffer* log_buf = r_args->log_buf;
     (void)log_buf;
 
+    STRING_BUFFER_PUT(log_buf, "Reader launched\n");
+
     while (watch_struct_is_running(w_struct)) {
 
         watch_struct_reader_signal(w_struct);
@@ -98,6 +100,8 @@ void* reader_get_cpu_data(void* arg) {
         pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 
     }
+    STRING_BUFFER_PUT(log_buf, "Reader finished loop\n");
+
 
     pthread_cleanup_pop(1);
 

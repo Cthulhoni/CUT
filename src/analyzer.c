@@ -65,6 +65,9 @@ void* analyzer_process_cpu_data(void* arg) {
     /* Assumes number of cores doesn't change during execution */
     size_t cores = 0;
 
+    STRING_BUFFER_PUT(log_buf, "Analyzer launched\n");
+
+
     while (watch_struct_is_running(w_struct)) {
 
         watch_struct_analyzer_signal(w_struct);
@@ -132,6 +135,9 @@ void* analyzer_process_cpu_data(void* arg) {
         free(temp_string);
         temp_string = NULL;
     }
+
+    STRING_BUFFER_PUT(log_buf, "Analyzer finished loop\n");
+
 
     if (last_total) {
         free(last_total);

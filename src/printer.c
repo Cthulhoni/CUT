@@ -49,6 +49,9 @@ void* printer_print(void* arg) {
     string_buffer* log_buf = p_args->log_buf;
     (void)log_buf;
 
+    STRING_BUFFER_PUT(log_buf, "Printer launched\n");
+
+
     while(watch_struct_is_running(w_struct)) {
 
         watch_struct_printer_signal(w_struct);
@@ -61,6 +64,9 @@ void* printer_print(void* arg) {
         temp_string = NULL;
 
     }
+
+    STRING_BUFFER_PUT(log_buf, "Printer finished loop\n");
+
 
     pthread_cleanup_pop(1);
 

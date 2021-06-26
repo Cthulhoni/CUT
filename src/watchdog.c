@@ -118,6 +118,8 @@ void* watchdog_watch(void* arg) {
     string_buffer* log_buf = w_args->log_buf;
     (void)log_buf;
 
+    STRING_BUFFER_PUT(log_buf, "Watchdog launched\n");
+
 
     while(true) {
 
@@ -126,6 +128,8 @@ void* watchdog_watch(void* arg) {
         bool check = watch_struct_check(w_struct);
 
         if (!check) {
+
+            STRING_BUFFER_PUT(log_buf, "Watchdog closing the program\n");
 
             for (size_t i = 0; i < w_args->num_of_threads; ++i) {
                 if(w_args->threads[i]) {
