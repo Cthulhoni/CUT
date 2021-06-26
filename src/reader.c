@@ -87,13 +87,7 @@ void* reader_get_cpu_data(void* arg) {
             strcat(raw_data, buffer);
         }
 
-        string_buffer_lock(sbuf);
-        if (string_buffer_is_full(sbuf)) {
-            string_buffer_wait_get(sbuf);
-        }
-        string_buffer_put(sbuf, raw_data);
-        string_buffer_call_get(sbuf);
-        string_buffer_unlock(sbuf);
+        STRING_BUFFER_PUT(sbuf, raw_data);
 
         free(raw_data);
         raw_data = NULL;

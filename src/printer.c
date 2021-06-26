@@ -53,13 +53,7 @@ void* printer_print(void* arg) {
 
         watch_struct_printer_signal(w_struct);
 
-        string_buffer_lock(print_buf);
-        if (string_buffer_is_empty(print_buf)) {
-            string_buffer_wait_put(print_buf);
-        }
-        temp_string = string_buffer_get(print_buf);
-        string_buffer_call_put(print_buf);
-        string_buffer_unlock(print_buf);
+        STRING_BUFFER_GET(print_buf, temp_string);
 
         CLEAR_SCREEN();
         printf("%s\n", temp_string);

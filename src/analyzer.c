@@ -69,13 +69,7 @@ void* analyzer_process_cpu_data(void* arg) {
 
         watch_struct_analyzer_signal(w_struct);
         
-        string_buffer_lock(sbuf);
-        if (string_buffer_is_empty(sbuf)) {
-            string_buffer_wait_put(sbuf);
-        }
-        temp_string = string_buffer_get(sbuf);
-        string_buffer_call_put(sbuf);
-        string_buffer_unlock(sbuf);
+        STRING_BUFFER_GET(sbuf, temp_string);
         
         if (!last_idle || !last_total) {
             
@@ -131,15 +125,7 @@ void* analyzer_process_cpu_data(void* arg) {
             line = strtok(NULL, newline);
         }
 
-        /* First string to enter print_buf is always empty */
-
-        string_buffer_lock(print_buf);
-        if (string_buffer_is_full(print_buf)) {
-            string_buffer_wait_get(print_buf);
-        }
-        string_buffer_put(print_buf, percentage_data);
-        string_buffer_call_get(print_buf);
-        string_buffer_unlock(print_buf);
+        STRING_BUFFER_PUT(print_buf, percentage_data);
 
         free(percentage_data);
         percentage_data = NULL;

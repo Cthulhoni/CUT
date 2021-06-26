@@ -45,14 +45,7 @@ void* logger_print(void* arg) {
     string_buffer* log_buf = l_args->log_buf;
 
     while (true) {
-
-        string_buffer_lock(log_buf);
-        if (string_buffer_is_empty(log_buf)) {
-            string_buffer_wait_put(log_buf);
-        }
-        temp_string = string_buffer_get(log_buf);
-        string_buffer_call_put(log_buf);
-        string_buffer_unlock(log_buf);
+        STRING_BUFFER_GET(log_buf, temp_string);
 
         fputs(temp_string, log_file);
         free(temp_string);
