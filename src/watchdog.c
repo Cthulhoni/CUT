@@ -6,7 +6,7 @@
 #include <stdatomic.h>
 #include <stdbool.h>
 
-#define WATCHDOG_WAIT_TIME 3U
+#define WATCHDOG_WAIT_TIME 2U
 
 struct watch_struct {
     atomic_bool running;
