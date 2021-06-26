@@ -32,7 +32,7 @@ DEP_FLAGS := -MMD -MP
 
 
 ifeq ($(CC),clang)
-	C_FLAGS += -Weverything
+	C_FLAGS += -Weverything -Wno-disabled-macro-expansion
 else ifneq (, $(filter $(CC), cc gcc))
 	C_FLAGS += -rdynamic
 endif
