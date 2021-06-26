@@ -10,6 +10,7 @@ typedef struct watch_struct watch_struct;
 watch_struct* watch_struct_create(void);
 void watch_struct_destroy(watch_struct* w_struct);
 bool watch_struct_check(watch_struct* w_struct);
+void watch_struct_clear_signals(watch_struct* w_struct);
 void watch_struct_launch(watch_struct* w_struct);
 void watch_struct_stop(watch_struct* w_struct);
 bool watch_struct_is_running(watch_struct* w_struct);
