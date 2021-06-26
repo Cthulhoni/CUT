@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <stdbool.h>
+#include <string_buffer.h>
 
 typedef struct watch_struct watch_struct;
 
@@ -21,7 +22,7 @@ void watch_struct_printer_signal(watch_struct* w_struct);
 
 typedef struct watchdog_args watchdog_args;
 
-watchdog_args* watchdog_args_create(watch_struct* w_struct, size_t num_of_threads, pthread_t threads[]);
+watchdog_args* watchdog_args_create(watch_struct* w_struct, string_buffer* log_buf, size_t num_of_threads, pthread_t threads[]);
 void watchdog_args_destroy(watchdog_args* w_args);
 
 void* watchdog_watch(void* arg);

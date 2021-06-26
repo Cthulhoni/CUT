@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdatomic.h>
 #include <stdbool.h>
+#include <string_buffer.h>
 
 #define WATCHDOG_WAIT_TIME 2U
 
@@ -84,17 +85,19 @@ void watch_struct_printer_signal(watch_struct* w_struct) {
 
 struct watchdog_args {
     watch_struct* w_struct;
+    string_buffer* log_buf;
     size_t num_of_threads;
     pthread_t threads[];
 };
 
-watchdog_args* watchdog_args_create(watch_struct* w_struct, size_t num_of_threads, pthread_t threads[]) {
+watchdog_args* watchdog_args_create(watch_struct* w_struct, string_buffer* log_buf, size_t num_of_threads, pthread_t threads[]) {
     watchdog_args* w_args = malloc(sizeof(*w_args) + num_of_threads * sizeof(*w_args->threads));
     if (!w_args)
         return NULL;
-    if (!w_struct || !threads)
+    if (!w_struct || !threads || !log_buf)
         return NULL;
     w_args->w_struct = w_struct;
+    w_args->log_buf = log_buf;
     w_args->num_of_threads = num_of_threads;
     memcpy(w_args->threads, threads, num_of_threads * sizeof(*threads));
 
@@ -112,6 +115,9 @@ void* watchdog_watch(void* arg) {
 
     watchdog_args* w_args = (watchdog_args*) arg;
     watch_struct* w_struct = w_args->w_struct;
+    string_buffer* log_buf = w_args->log_buf;
+    (void)log_buf;
+
 
     while(true) {
 

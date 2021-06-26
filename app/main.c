@@ -88,7 +88,7 @@ int main(void) {
     threads[2] = reader;
     threads[3] = logger;
 
-    w_args = watchdog_args_create(w_struct, NUM_OF_THREADS, threads);
+    w_args = watchdog_args_create(w_struct, log_buf, NUM_OF_THREADS, threads);
 
     if (!w_args)
         return -1;
