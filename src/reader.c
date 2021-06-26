@@ -94,8 +94,10 @@ void* reader_get_cpu_data(void* arg) {
         free(raw_data);
         raw_data = NULL;
 
+        pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
         fclose(stat_file);
         stat_file = NULL;
+        pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 
     }
 

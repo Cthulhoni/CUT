@@ -114,16 +114,14 @@ void* watchdog_watch(void* arg) {
         bool check = watch_struct_check(w_struct);
 
         if (!check) {
-            atomic_store(&w_struct->running, false);
 
             for (size_t i = 0; i < w_args->num_of_threads; ++i) {
                 if(w_args->threads[i]) {
                     pthread_cancel(w_args->threads[i]);
-                    pthread_join(w_args->threads[i], NULL);
                 }
             }
 
-            perror("Watchdog closed the program\n");
+            perror("Watchdog closed the program");
             return NULL;
         }
 

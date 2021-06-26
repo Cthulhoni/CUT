@@ -67,9 +67,9 @@ int main(void) {
     pthread_t analyzer = 0;
     pthread_t printer = 0;
 
-    pthread_create(&printer, NULL, printer_print, (void*)p_args);
+    pthread_create(&reader, NULL, printer_print, (void*)p_args);
     pthread_create(&analyzer, NULL, analyzer_process_cpu_data, (void*)a_args);
-    pthread_create(&reader, NULL, reader_get_cpu_data, (void*)r_args);
+    pthread_create(&printer, NULL, reader_get_cpu_data, (void*)r_args);
 
     threads[0] = printer;
     threads[1] = analyzer;
@@ -82,12 +82,14 @@ int main(void) {
 
     pthread_create(&watchdog, NULL, watchdog_watch, (void*)w_args);
 
-
     pthread_join(reader, NULL);
     pthread_join(analyzer, NULL);
     pthread_join(printer, NULL);
 
+
+    if (!watch_struct_is_running(w_struct))
     pthread_cancel(watchdog);
+    
     pthread_join(watchdog, NULL);
     
     return 0;
