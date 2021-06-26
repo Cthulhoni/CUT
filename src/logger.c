@@ -48,6 +48,7 @@ void* logger_print(void* arg) {
         STRING_BUFFER_GET(log_buf, temp_string);
 
         fputs(temp_string, log_file);
+        fflush(log_file);
         free(temp_string);
         temp_string = NULL;
 
