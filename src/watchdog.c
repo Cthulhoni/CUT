@@ -40,6 +40,12 @@ bool watch_struct_check(watch_struct* w_struct) {
                   && atomic_load(&w_struct->printer_signal);
 }
 
+void watch_struct_clear_signals(watch_struct* w_struct) {
+    atomic_store(&w_struct->reader_signal, false);
+    atomic_store(&w_struct->analyzer_signal, false);
+    atomic_store(&w_struct->printer_signal, false);
+}
+
 void watch_struct_launch(watch_struct* w_struct) {
     if (!w_struct)
         return;
@@ -74,7 +80,7 @@ void watch_struct_printer_signal(watch_struct* w_struct) {
     if (!w_struct)
         return;
     atomic_store(&w_struct->printer_signal, true);
-} 
+}
 
 struct watchdog_args {
     watch_struct* w_struct;
@@ -125,9 +131,8 @@ void* watchdog_watch(void* arg) {
             return NULL;
         }
 
-        atomic_store(&w_struct->reader_signal, false);
-        atomic_store(&w_struct->analyzer_signal, false);
-        atomic_store(&w_struct->printer_signal, false);
+        watch_struct_clear_signals(w_struct);
+
     }
 
 }
