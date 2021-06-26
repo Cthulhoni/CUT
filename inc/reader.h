@@ -6,7 +6,7 @@
 
 typedef struct reader_args reader_args;
 
-reader_args* reader_args_create(string_buffer* sbuf, watch_struct* w_struct);
+reader_args* reader_args_create(string_buffer* sbuf, watch_struct* w_struct, string_buffer* log_buf);
 void reader_args_destroy(reader_args* r_args);
 
 

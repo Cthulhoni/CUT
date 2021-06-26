@@ -12,16 +12,18 @@
 struct reader_args {
     string_buffer* sbuf;
     watch_struct* w_struct;
+    string_buffer* log_buf;
 };
 
-reader_args* reader_args_create(string_buffer* sbuf, watch_struct* w_struct) {
+reader_args* reader_args_create(string_buffer* sbuf, watch_struct* w_struct, string_buffer* log_buf) {
     reader_args* r_args = malloc(sizeof(*r_args));
     if (!r_args)
         return NULL;
-    if (!sbuf || !w_struct)
+    if (!sbuf || !w_struct || !log_buf)
         return NULL;
     r_args->sbuf = sbuf;
     r_args->w_struct = w_struct;
+    r_args->log_buf = log_buf;
     return r_args;
 }
 void reader_args_destroy(reader_args* r_args) {
@@ -55,6 +57,8 @@ void* reader_get_cpu_data(void* arg) {
 
     string_buffer* sbuf = r_args->sbuf;
     watch_struct* w_struct = r_args->w_struct;
+    string_buffer* log_buf = r_args->log_buf;
+    (void)log_buf;
 
     while (watch_struct_is_running(w_struct)) {
 

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <watchdog.h>
+#include <string_buffer.h>
 
 #define PERCENTAGE_LINE_SIZE 16
 
@@ -10,17 +11,19 @@ struct analyzer_args {
     string_buffer* sbuf;
     string_buffer* print_buf;
     watch_struct* w_struct;
+    string_buffer* log_buf;
 };
 
-analyzer_args* analyzer_args_create(string_buffer* sbuf, string_buffer* print_buf, watch_struct* w_struct) {
+analyzer_args* analyzer_args_create(string_buffer* sbuf, string_buffer* print_buf, watch_struct* w_struct, string_buffer* log_buf) {
     analyzer_args* a_args = malloc(sizeof(*a_args));
     if (!a_args)
         return NULL;
-    if (!sbuf || !print_buf || !w_struct)
+    if (!sbuf || !print_buf || !w_struct || !log_buf)
         return NULL;
     a_args->sbuf = sbuf;
     a_args->print_buf = print_buf;
     a_args->w_struct = w_struct;
+    a_args->log_buf = log_buf;
     return a_args;
 }
 
@@ -32,7 +35,7 @@ void analyzer_args_destroy(analyzer_args* a_args) {
 static unsigned long long* last_idle = NULL;
 static unsigned long long* last_total = NULL;
 static char* temp_string = NULL;
-static char* percentage_data;
+static char* percentage_data = NULL;
 
 static void cleanup() {
     if (last_total)
@@ -56,6 +59,8 @@ void* analyzer_process_cpu_data(void* arg) {
     string_buffer* sbuf = a_args->sbuf;
     string_buffer* print_buf = a_args->print_buf;
     watch_struct* w_struct = a_args->w_struct;
+    string_buffer* log_buf = a_args->log_buf;
+    (void)log_buf;
 
     /* Assumes number of cores doesn't change during execution */
     size_t cores = 0;
@@ -63,6 +68,7 @@ void* analyzer_process_cpu_data(void* arg) {
     while (watch_struct_is_running(w_struct)) {
 
         watch_struct_analyzer_signal(w_struct);
+        
         string_buffer_lock(sbuf);
         if (string_buffer_is_empty(sbuf)) {
             string_buffer_wait_put(sbuf);
