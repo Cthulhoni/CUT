@@ -74,7 +74,9 @@ char* string_buffer_get(string_buffer* sbuf) {
 }
 
 void string_buffer_put(string_buffer* sbuf, char* elem) {
-    if (string_buffer_is_full(sbuf) || !elem || !sbuf)
+    if (!sbuf)
+        return;
+    if (string_buffer_is_full(sbuf) || !elem)
         return;
 
     sbuf->buffer[sbuf->head] = malloc(sizeof(char) * (strlen(elem) + 1));
